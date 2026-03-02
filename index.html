@@ -361,6 +361,17 @@
                         <option value="3">3+ Bedrooms</option>
                     </select>
                 </div>
+                <div class="filter-group">
+                    <label for="minStay">Your Trip Length (nights)</label>
+                    <select id="minStay">
+                        <option value="all">Any length</option>
+                        <option value="1">1+ nights</option>
+                        <option value="2">2+ nights</option>
+                        <option value="3">3+ nights</option>
+                        <option value="7">7+ nights (weekly)</option>
+                        <option value="30">30+ nights (monthly)</option>
+                    </select>
+                </div>
             </div>
             
             <div class="amenities">
@@ -405,6 +416,7 @@
             guests: 0,
             price: 500,
             bedrooms: 'all',
+            minStay: 'all',
             wifi: false,
             parking: false,
             terrace: false,
@@ -473,13 +485,14 @@
                 const matchGuests = filters.guests === 0 || (p.maximumGuests >= filters.guests);
                 const matchPrice = p.price <= filters.price;
                 const matchBedrooms = filters.bedrooms === 'all' || p.bedrooms === parseInt(filters.bedrooms);
+                const matchMinStay = filters.minStay === 'all' || (p.minimumStay <= parseInt(filters.minStay));
                 const matchWifi = !filters.wifi || p.wifi;
                 const matchParking = !filters.parking || p.parking;
                 const matchTerrace = !filters.terrace || p.terrace;
                 const matchKitchen = !filters.kitchen || p.kitchen;
                 const matchBathroom = !filters.bathroom || p.bathroom;
                 
-                return matchSearch && matchGuests && matchPrice && matchBedrooms && 
+                return matchSearch && matchGuests && matchPrice && matchBedrooms && matchMinStay &&
                        matchWifi && matchParking && matchTerrace && 
                        matchKitchen && matchBathroom;
             });
@@ -570,6 +583,11 @@
 
         document.getElementById('bedrooms').addEventListener('change', (e) => {
             filters.bedrooms = e.target.value;
+            renderProperties();
+        });
+
+        document.getElementById('minStay').addEventListener('change', (e) => {
+            filters.minStay = e.target.value;
             renderProperties();
         });
 
